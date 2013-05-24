@@ -1,0 +1,61 @@
+
+#body {
+    min-width:1000px;
+    position:relative;
+}.grey {
+     background-color:#f4f4f4;
+ }
+.top {
+    width: 96%;
+    margin-top: 1%;
+}
+.legend {
+    font-size: 2.2em;
+
+}
+
+.hero-unit {
+
+    background-color:#eaeaea;
+    text-align: center;
+
+}
+.user{
+    margin-bottom: 5%;
+    vertical-align: middle ;
+    position: relative;
+}
+
+.email{
+
+    margin-bottom: 5%;
+    vertical-align: middle ;
+    position: relative;
+}
+.textarea {
+    vertical-align: middle ;
+    position: relative;
+}
+
+.buttons {
+    text-align: center;
+}
+.list {
+    text-align: center;
+    width: 32%;
+    float: left;
+    position: relative;
+    display: inline-block;
+    margin-left: 0em;
+    margin-right: 0em;
+}
+.thumbnail {
+    width:96%;
+    height:170px;
+    overflow:auto;
+}
+
+.innerAccordionNamesList {
+    list-style-type:none;
+    text-align: left;
+}
