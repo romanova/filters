@@ -9,12 +9,12 @@ var filterService = {
 
 function Filter(service) {
     var data = [];
-    var nextId = function () {
+    var generateId = function () {
         this.id = this.id ? this.id + 1 : 0;
     };
 
     function Node(parent, value) {
-        this.id = "id_" + nextId();
+        this.id = "id_" + generateId();
         this.value = value;
         this.parent = parent;
         this.children = [];
@@ -51,10 +51,24 @@ function Filter(service) {
             siblings.selected = false;
         }
         node.selected = true;
+        notifyAll();
     };
 
     this.remove = function () {
-        //TODO implement removing
+        for (var i = 0; i < data.length; i++) {
+            var index;
+            for (var j = 0; j < data[i].children.length; j++) {
+                if (data[i].children[j].selected) {
+                    index = j;
+                    break;
+                }
+            }
+
+            if (index) {
+                data[i].children.splice(index, 1);
+                break;
+            }
+        }
         notifyAll();
     };
 
