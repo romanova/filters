@@ -56,7 +56,7 @@ function Filter(service) {
             }
         }
         return undefined;
-    }
+    };
 
     this.select = function (id) {
         var node = nodeById(id);
@@ -92,11 +92,17 @@ function Filter(service) {
         notifyAll();
     };
 
-    this.sort = function () {
-        //TODO implement sort
+    this.sort = function (parent_id) {
+        var node = nodeById(parent_id);
+
+        node.children.sort(function (a, b) {
+            if (a.value < b.value) return -1;
+            if (a.value > b.value) return 1;
+            return 0;
+        });
+
         notifyAll();
     };
-
     this.move = function () {
         //TODO implement move
         notifyAll();
