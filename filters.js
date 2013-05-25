@@ -43,18 +43,19 @@ function Filter(service) {
             listeners[i].call(undefined);
         }
     };
-    
-    var nodeById = function(id) {
+
+    var nodeById = function (id) {
         for (var i = 0; i < data.length; i++) {
             if (data[i].id === id) {
                 return data[i];
             }
-            for(var j = 0; j < data[i].children.length; j++) {
+            for (var j = 0; j < data[i].children.length; j++) {
                 if (data[i].children[j].id === id) {
                     return data[i].children[j];
                 }
-           }
+            }
         }
+        return undefined;
     }
 
     this.select = function (id) {
@@ -70,15 +71,13 @@ function Filter(service) {
 
     this.remove = function () {
         for (var i = 0; i < data.length; i++) {
-           var index;
-           for (var j = 0; j < data[i].children.length; j++) {
             var index;
             for (var j = 0; j < data[i].children.length; j++) {
                 if (data[i].children[j].selected) {
                     index = j;
                     break;
                 }
-           }
+            }
 
             if (index) {
                 data[i].children.splice(index, 1);
