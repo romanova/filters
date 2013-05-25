@@ -3,7 +3,7 @@ var filterService = {
         return {
             "brand": ["ecco", "adidas"],
             "type": []
-        }
+        };
     }
 };
 
