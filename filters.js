@@ -9,8 +9,10 @@ var filterService = {
 
 function Filter(service) {
     var data = [];
+    var currentId = 0;
     var generateId = function () {
-        this.id = this.id ? this.id + 1 : 0;
+        currentId += 1;
+        return currentId;
     };
 
     function Node(parent, value) {
@@ -63,7 +65,7 @@ function Filter(service) {
         if (!node.parent) return;
         var siblings = node.parent.children;
         for (var i = 0; i < siblings.length; i++) {
-            siblings.selected = false;
+            siblings[i].selected = false;
         }
         node.selected = true;
         notifyAll();
