@@ -3,7 +3,7 @@ var filterService = {
         return {
             "brand": ["ecco", "adidas"],
             "type": []
-        }
+        };
     }
 };
 
@@ -56,7 +56,7 @@ function Filter(service) {
             }
         }
         return undefined;
-    }
+    };
 
     this.select = function (id) {
         var node = nodeById(id);
