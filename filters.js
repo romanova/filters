@@ -71,15 +71,15 @@ function Filter(service) {
         notifyAll();
     };
 
-    this.remove = function (parent_id){
+    this.remove = function (parent_id) {
         var children = nodeById(parent_id).children;
         for (var i = 0; i < children.length; i++) {
             if (children[i].selected) {
-                children[i].selected.splice(i, 1);
+                children.splice(i, 1);
+                notifyAll();
                 break;
             }
         }
-        notifyAll();
     };
 
     this.add = function (parent_id, value) {
@@ -99,10 +99,11 @@ function Filter(service) {
 
         notifyAll();
     };
+
     this.move = function (parent_id) {
         var node = nodeById(parent_id);
         var index = data.indexOf(node);
-        data.splice(index,1);
+        data.splice(index, 1);
         data.push(node);
         notifyAll();
     };

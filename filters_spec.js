@@ -23,26 +23,6 @@ describe('A suite for filter model testing', function () {
         expect(filter.data()[0].children[0].id).not.toBe(filter.data()[0].children[1].id);
     });
 
-    it('should sort children', function () {
-
-        var called = false;
-        runs(function () {
-            filter.attach(function () {
-                called = true;
-            });
-            filter.sort(filter.data()[0].id);
-        });
-
-        waitsFor(function () {
-            return called;
-        }, 'Listener should be called', 100);
-
-        runs(function () {
-            expect(filter.data()[0].children[2].value).toEqual("tommy");
-            expect(filter.data()[0].children[1].value).toEqual("ecco");
-        });
-    });
-
     it('should select a child', function () {
 
         var called = 0;
@@ -61,6 +41,91 @@ describe('A suite for filter model testing', function () {
         runs(function () {
             expect(filter.data()[0].children[0].selected).toBe(false);
             expect(filter.data()[0].children[1].selected).toBe(true);
+        });
+    });
+
+    it('should remove a child', function () {
+
+        var called = 0;
+        var toBeRemoved;
+        runs(function () {
+            filter.attach(function () {
+                called += 1;
+            });
+            toBeRemoved = filter.data()[0].children[0].id;
+            filter.select(toBeRemoved);
+            filter.remove(filter.data()[0].id);
+        });
+
+        waitsFor(function () {
+            return called > 1;
+        }, 'Listener should be called', 100);
+
+        runs(function () {
+            expect(filter.data()[0].children[0].id).not.toBe(toBeRemoved);
+        });
+    });
+
+    it('should add a child', function () {
+
+        var called = 0;
+        var toBeAdded = "diesel";
+        runs(function () {
+            filter.attach(function () {
+                called += 1;
+            });
+            filter.add(filter.data()[0].id, toBeAdded);
+        });
+
+        waitsFor(function () {
+            return called > 0;
+        }, 'Listener should be called', 100);
+
+        runs(function () {
+            var length = filter.data()[0].children.length;
+            expect(filter.data()[0].children[length - 1].value).toBe(toBeAdded);
+        });
+    });
+
+    it('should move a parent', function () {
+
+        var called = 0;
+        var toBeMoved;
+        runs(function () {
+            filter.attach(function () {
+                called += 1;
+            });
+            toBeMoved = filter.data()[0].id;
+            filter.move(toBeMoved);
+        });
+
+        waitsFor(function () {
+            return called > 0;
+        }, 'Listener should be called', 100);
+
+        runs(function () {
+            var length = filter.data().length;
+            expect(filter.data()[length - 1].id).toBe(toBeMoved);
+        });
+    });
+
+    it('should sort children', function () {
+
+        var called = false;
+        runs(function () {
+            filter.attach(function () {
+                called = true;
+            });
+            filter.sort(filter.data()[0].id);
+        });
+
+        waitsFor(function () {
+            return called;
+        }, 'Listener should be called', 100);
+
+        runs(function () {
+            expect(filter.data()[0].children[2].value).toEqual("tommy");
+            expect(filter.data()[0].children[1].value).toEqual("ecco");
         });
     });
 });
