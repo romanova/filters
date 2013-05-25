@@ -69,18 +69,11 @@ function Filter(service) {
         notifyAll();
     };
 
-    this.remove = function () {
-        for (var i = 0; i < data.length; i++) {
-            var index;
-            for (var j = 0; j < data[i].children.length; j++) {
-                if (data[i].children[j].selected) {
-                    index = j;
-                    break;
-                }
-            }
-
-            if (index) {
-                data[i].children.splice(index, 1);
+    this.remove = function (parent_id){
+        var children = nodeById(parent_id).children;
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].selected) {
+                children[i].selected.splice(i, 1);
                 break;
             }
         }
@@ -88,7 +81,8 @@ function Filter(service) {
     };
 
     this.add = function (parent_id, value) {
-        //TODO implement adding
+        var node = nodeById(parent_id);
+        node.children.push(new Node(node, value));
         notifyAll();
     };
 
@@ -103,8 +97,11 @@ function Filter(service) {
 
         notifyAll();
     };
-    this.move = function () {
-        //TODO implement move
+    this.move = function (parent_id) {
+        var node = nodeById(parent_id);
+        var index = data.indexOf(node);
+        data.splice(index,1);
+        data.push(node);
         notifyAll();
     };
 
