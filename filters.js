@@ -200,7 +200,11 @@ var controller = {
         var filters = new Filter(filterService);
         var accordion = new Accordion(filters);
         accordion.bind("filters");
+        $("#sort").click(function() {
+           filters.sort(accordion.controller.selectedParent);
+        });
     }
+
 };
 
 $(document).ready(function () {
