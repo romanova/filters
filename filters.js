@@ -176,8 +176,14 @@ function Accordion(model) {
     };
 
     this.controller = new (function () {
+        var data = model.data();
         this.init = function () {
-
+            for (var i = 0; i < data.length; i++) {
+                var id = data[i].id;
+                $('#' + data[i].id).on('shown', function () {
+                    this.selectedParent = id;
+                });
+            }
         };
         this.selectedParent = undefined;
         this.selectedChild = undefined;
