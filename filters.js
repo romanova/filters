@@ -176,12 +176,16 @@ function Accordion(model) {
     };
 
     this.controller = new (function () {
+        var that = this;
         var data = model.data();
         this.init = function () {
             for (var i = 0; i < data.length; i++) {
-                var id = data[i].id;
-                $('#' + data[i].id).on('shown', function () {
-                    this.selectedParent = id;
+                var element = $('#' + data[i].id);
+                element.on('shown', function () {
+                    that.selectedParent = this.id;
+                });
+                element.on('hidden', function () {
+                    that.selectedParent = undefined;
                 });
             }
         };
@@ -194,7 +198,8 @@ function Accordion(model) {
 var controller = {
     init: function () {
         var filters = new Filter(filterService);
-        new Accordion(filters).bind("filters");
+        var accordion = new Accordion(filters);
+        accordion.bind("filters");
     }
 };
 
