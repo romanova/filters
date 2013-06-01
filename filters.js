@@ -113,36 +113,51 @@ function Filter(service) {
     };
 }
 
-function FilterUI(model) {
-    var id;
-    var update = function () {
-        if (!id) return;
-        //TODO implement update
-    };
+function Accordion(id, model) {
+    var that = this;
+    this.renderer = new (function() {
+        this.accordion_template = "<div class='accordion' id='accordion'>{group_template}</div>";
 
-    var select = function (node) {
-        model.select(node);
-    };
+        this.inner_template = "<li>{value}</li>";
 
-    model.attach(function () {
-        update();
+        this.group_template = "<div class=accordion-group'>" +
+        "<div class='accordion-heading'><a class='accordion-toggle' data-toggle='collapse'" +
+        "data-parent='#accordion' href='#{id}'>" +
+        "{value}" +
+            "<i class='icon-chevron-down pull-right'></i>" +
+        "</a>" +
+         "</div>" +
+        "<div id='{id}' class='accordion-body in collapse' style='height: auto;'>" +
+            "<div class='accordion-inner'>" +
+                "<ul class='innerAccordionNamesList'>" +
+                    "{inner_template}" +
+                "</ul>" +
+            "</div>" +
+        "</div>" +
+        "</div>";
+        this.render = function() {
+            function insert(template, name, content) {
+
+            }
+            document.getElementById(id).innerHTML = content;
+        };
+    })();
+
+    model.attach(function() {
+        that.renderer.render();
     });
 
-    this.bind = function (d) {
-        id = d;
-        update();
-    };
+    this.controller = (function () {
+
+    });
+
 }
 
 var controller = {
-    init: function () {
-        var filter = new Filter(filterService);
-        var filterUI = new FilterUI(filter);
-        filterUI.bind("accordion");
-
-        //this is just a sample
-        document.querySelector("id=move").attachEvent("onclick", function () {
-            filter.move();
-        });
+    init: function() {
+        var filters = new Filter(filterService);
+        var accordion = new Accordion("filters", filters);
+        accordion.renderer.render();
     }
 };
+controller.init();
