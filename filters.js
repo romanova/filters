@@ -136,9 +136,17 @@ function Accordion(id, model) {
         "</div>" +
         "</div>";
         this.render = function() {
-            function insert(template, name, content) {
+            function insert(template, name, value) {
 
             }
+            function generateGroups() {
+                function generateInners() {
+
+                }
+
+            }
+
+            var content = insert(this.accordion_template, "group_template", generateGroups());
             document.getElementById(id).innerHTML = content;
         };
     })();
