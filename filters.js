@@ -1,8 +1,9 @@
 var filterService = {
     load: function () {
         return {
-            "brand": ["ecco", "adidas"],
-            "type": []
+            "Brand": ["ecco", "adidas"],
+            "Type": ["one", "two"],
+            "Testing": ["one", "two"]
         };
     }
 };
@@ -113,21 +114,21 @@ function Filter(service) {
     };
 }
 
-function Accordion(id, model) {
-    var that = this;
+function Accordion(model) {
+    var id, that = this;
     this.renderer = new (function () {
-        this.accordion_template = "<div class='accordion' id='accordion2'>{group_template}</div>";
+        this.accordion_template = "<div class='accordion' id='accordion'>{group_template}</div>";
 
         this.inner_template = "<li>{value}</li>";
 
-        this.group_template = "<div class=accordion-group'>" +
+        this.group_template = "<div class='accordion-group'>" +
             "<div class='accordion-heading'><a class='accordion-toggle' data-toggle='collapse'" +
-            "data-parent='#accordion2' href='#{id}'>" +
+            " data-parent='#accordion' href='#{id}'>" +
             "{value}" +
             "<i class='icon-chevron-down pull-right'></i>" +
             "</a>" +
             "</div>" +
-            "<div id='{id}' class='accordion-body in collapse' style='height: auto;'>" +
+            "<div id='{id}' class='accordion-body in collapse'>" +
             "<div class='accordion-inner'>" +
             "<ul class='innerAccordionNamesList'>" +
             "{inner_template}" +
@@ -135,12 +136,13 @@ function Accordion(id, model) {
             "</div>" +
             "</div>" +
             "</div>";
+
         this.render = function () {
             var insert = function (template, name, value) {
                 return template.replace("{" + name + "}", value);
             };
             var generateGroups = function (data) {
-                var groups  = "";
+                var groups = "";
                 var generateInners = function (children) {
                     var inners = "";
                     for (var i = 0; i < children.length; i++) {
@@ -157,18 +159,28 @@ function Accordion(id, model) {
                 }
                 return groups;
             };
-
-            var content = insert(this.accordion_template, "group_template", generateGroups(model.data()));
-            document.getElementById(id).innerHTML = content;
+            if (!id) {
+                return;
+            }
+            $('#' + id).html(insert(this.accordion_template, "group_template", generateGroups(model.data())));
         };
     })();
 
-    model.attach(function () {
-        that.renderer.render();
-    });
+    this.bind = function (_id) {
+        id = _id;
+        model.attach(function () {
+            that.renderer.render();
+        });
+        this.renderer.render();
+        this.controller.init();
+    };
 
-    this.controller = (function () {
+    this.controller = new (function () {
+        this.init = function () {
 
+        };
+        this.selectedParent = undefined;
+        this.selectedChild = undefined;
     });
 
 }
@@ -176,8 +188,11 @@ function Accordion(id, model) {
 var controller = {
     init: function () {
         var filters = new Filter(filterService);
-        var accordion = new Accordion("filters", filters);
-        accordion.renderer.render();
+        new Accordion(filters).bind("filters");
     }
 };
-controller.init();
+
+$(document).ready(function () {
+    controller.init();
+    $('.collapse').collapse();
+});
