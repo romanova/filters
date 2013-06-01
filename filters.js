@@ -115,43 +115,55 @@ function Filter(service) {
 
 function Accordion(id, model) {
     var that = this;
-    this.renderer = new (function() {
-        this.accordion_template = "<div class='accordion' id='accordion'>{group_template}</div>";
+    this.renderer = new (function () {
+        this.accordion_template = "<div class='accordion' id='accordion2'>{group_template}</div>";
 
         this.inner_template = "<li>{value}</li>";
 
         this.group_template = "<div class=accordion-group'>" +
-        "<div class='accordion-heading'><a class='accordion-toggle' data-toggle='collapse'" +
-        "data-parent='#accordion' href='#{id}'>" +
-        "{value}" +
+            "<div class='accordion-heading'><a class='accordion-toggle' data-toggle='collapse'" +
+            "data-parent='#accordion2' href='#{id}'>" +
+            "{value}" +
             "<i class='icon-chevron-down pull-right'></i>" +
-        "</a>" +
-         "</div>" +
-        "<div id='{id}' class='accordion-body in collapse' style='height: auto;'>" +
-            "<div class='accordion-inner'>" +
-                "<ul class='innerAccordionNamesList'>" +
-                    "{inner_template}" +
-                "</ul>" +
+            "</a>" +
             "</div>" +
-        "</div>" +
-        "</div>";
-        this.render = function() {
-            function insert(template, name, value) {
-
-            }
-            function generateGroups() {
-                function generateInners() {
-
+            "<div id='{id}' class='accordion-body in collapse' style='height: auto;'>" +
+            "<div class='accordion-inner'>" +
+            "<ul class='innerAccordionNamesList'>" +
+            "{inner_template}" +
+            "</ul>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        this.render = function () {
+            var insert = function (template, name, value) {
+                return template.replace("{" + name + "}", value);
+            };
+            var generateGroups = function (data) {
+                var groups  = "";
+                var generateInners = function (children) {
+                    var inners = "";
+                    for (var i = 0; i < children.length; i++) {
+                        inners += insert(that.renderer.inner_template, "value", children[i].value);
+                    }
+                    return inners;
+                };
+                for (var i = 0; i < data.length; i++) {
+                    var group_content = insert(that.renderer.group_template, "value", data[i].value);
+                    group_content = insert(group_content, "id", data[i].id);
+                    group_content = insert(group_content, "id", data[i].id);
+                    group_content = insert(group_content, "inner_template", generateInners(data[i].children));
+                    groups += group_content;
                 }
+                return groups;
+            };
 
-            }
-
-            var content = insert(this.accordion_template, "group_template", generateGroups());
+            var content = insert(this.accordion_template, "group_template", generateGroups(model.data()));
             document.getElementById(id).innerHTML = content;
         };
     })();
 
-    model.attach(function() {
+    model.attach(function () {
         that.renderer.render();
     });
 
@@ -162,7 +174,7 @@ function Accordion(id, model) {
 }
 
 var controller = {
-    init: function() {
+    init: function () {
         var filters = new Filter(filterService);
         var accordion = new Accordion("filters", filters);
         accordion.renderer.render();
